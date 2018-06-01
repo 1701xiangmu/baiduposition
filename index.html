@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<input type="text" class="selectBoxPub_r flightto">
+
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=eFaNjhaFcBEWaqwqs3N5ziq4PKUClOiY
+
+"></script>
+		<script>
+			var isLocate = false; //判断是否定位
+
+			var flightto = document.querySelector(".flightto");
+			//获取地理位置定位
+			function locateMe() {
+				var geolocation = new BMap.Geolocation();
+				geolocation.getCurrentPosition(function(r) {
+					if(this.getStatus() == BMAP_STATUS_SUCCESS) {
+						isLocate = true;
+						var url = "http://api.map.baidu.com/geocoder/v2/" +
+							"?callback=renderReverse&location=" + r.point.lat + "," + r.point.lng + "&output=json&pois=1&ak=eFaNjhaFcBEWaqwqs3N5ziq4PKUClOiY";
+						var JSONP = document.createElement("script");
+						JSONP.src = url;
+						document.body.appendChild(JSONP);
+					} else {
+						alert('failed' + this.getStatus());
+					}
+				}, {
+					enableHighAccuracy: true
+				})
+			}
+			locateMe();
+
+			function renderReverse(r) {
+				flightto.value = r.result.addressComponent.city;
+				console.log(r);
+			}
+		</script>
+	</body>
+
+</html>
